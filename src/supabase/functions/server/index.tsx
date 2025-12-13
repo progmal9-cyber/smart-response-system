@@ -33,7 +33,7 @@ const initStorage = async () => {
 initStorage();
 
 // ============= AUTH ENDPOINTS =============
-app.post('/signup', async (c) => {
+app.post('/make-server-5c72f45a/signup', async (c) => {
   try {
     const { name, email, password } = await c.req.json();
 
@@ -65,7 +65,7 @@ app.post('/signup', async (c) => {
   }
 });
 
-app.post('/login', async (c) => {
+app.post('/make-server-5c72f45a/login', async (c) => {
   try {
     const { email, password } = await c.req.json();
 
@@ -100,7 +100,7 @@ app.post('/login', async (c) => {
 });
 
 // ============= IMAGE UPLOAD ENDPOINT =============
-app.post('/upload-image', async (c) => {
+app.post('/make-server-5c72f45a/upload-image', async (c) => {
   try {
     const formData = await c.req.formData();
     const file = formData.get('file') as File;
@@ -143,7 +143,7 @@ app.post('/upload-image', async (c) => {
 });
 
 // ============= SETTINGS ENDPOINTS =============
-app.get('/settings', async (c) => {
+app.get('/make-server-5c72f45a/settings', async (c) => {
   try {
     const settings = await kv.get('api:settings') || {
       facebookPageAccessToken: '',
@@ -158,7 +158,7 @@ app.get('/settings', async (c) => {
   }
 });
 
-app.put('/settings', async (c) => {
+app.put('/make-server-5c72f45a/settings', async (c) => {
   try {
     const settings = await c.req.json();
     await kv.set('api:settings', settings);
@@ -170,7 +170,7 @@ app.put('/settings', async (c) => {
 });
 
 // ============= TEST FACEBOOK CONNECTION =============
-app.post('/test-facebook', async (c) => {
+app.post('/make-server-5c72f45a/test-facebook', async (c) => {
   try {
     const { pageAccessToken, pageId } = await c.req.json();
 
@@ -193,7 +193,7 @@ app.post('/test-facebook', async (c) => {
 });
 
 // ============= TEST OPENAI CONNECTION =============
-app.post('/test-openai', async (c) => {
+app.post('/make-server-5c72f45a/test-openai', async (c) => {
   try {
     const { apiKey } = await c.req.json();
 
@@ -218,7 +218,7 @@ app.post('/test-openai', async (c) => {
 
 // ============= WEBHOOK ENDPOINTS =============
 // Verification endpoint for Facebook
-app.get('/webhook', async (c) => {
+app.get('/make-server-5c72f45a/webhook', async (c) => {
   const mode = c.req.query('hub.mode');
   const token = c.req.query('hub.verify_token');
   const challenge = c.req.query('hub.challenge');
@@ -235,7 +235,7 @@ app.get('/webhook', async (c) => {
 });
 
 // Webhook for receiving messages
-app.post('/webhook', async (c) => {
+app.post('/make-server-5c72f45a/webhook', async (c) => {
   try {
     const body = await c.req.json();
 
@@ -504,7 +504,7 @@ async function sendMessageWithButtons(recipientId: string, text: string, buttons
 }
 
 // ============= STATS ENDPOINT =============
-app.get('/stats', async (c) => {
+app.get('/make-server-5c72f45a/stats', async (c) => {
   try {
     const conversations = await kv.getByPrefix('conversation:') || [];
     const settings = await kv.get('ai:settings') || { enabled: true };
@@ -537,7 +537,7 @@ app.get('/stats', async (c) => {
 });
 
 // ============= AI TOGGLE ENDPOINT =============
-app.post('/ai/toggle', async (c) => {
+app.post('/make-server-5c72f45a/ai/toggle', async (c) => {
   try {
     const { enabled } = await c.req.json();
     await kv.set('ai:settings', { enabled });
@@ -549,7 +549,7 @@ app.post('/ai/toggle', async (c) => {
 });
 
 // ============= CONVERSATIONS ENDPOINTS =============
-app.get('/conversations', async (c) => {
+app.get('/make-server-5c72f45a/conversations', async (c) => {
   try {
     const conversations = await kv.getByPrefix('conversation:') || [];
 
@@ -601,7 +601,7 @@ app.get('/conversations', async (c) => {
 });
 
 // ============= CAMPAIGNS ENDPOINTS =============
-app.get('/campaigns', async (c) => {
+app.get('/make-server-5c72f45a/campaigns', async (c) => {
   try {
     const campaigns = await kv.getByPrefix('campaign:') || [];
 
@@ -637,7 +637,7 @@ app.get('/campaigns', async (c) => {
   }
 });
 
-app.post('/campaigns', async (c) => {
+app.post('/make-server-5c72f45a/campaigns', async (c) => {
   try {
     const data = await c.req.json();
     const id = Date.now().toString();
@@ -657,7 +657,7 @@ app.post('/campaigns', async (c) => {
   }
 });
 
-app.put('/campaigns/:id', async (c) => {
+app.put('/make-server-5c72f45a/campaigns/:id', async (c) => {
   try {
     const id = c.req.param('id');
     const data = await c.req.json();
@@ -676,7 +676,7 @@ app.put('/campaigns/:id', async (c) => {
   }
 });
 
-app.delete('/campaigns/:id', async (c) => {
+app.delete('/make-server-5c72f45a/campaigns/:id', async (c) => {
   try {
     const id = c.req.param('id');
     await kv.del(`campaign:${id}`);
@@ -688,7 +688,7 @@ app.delete('/campaigns/:id', async (c) => {
 });
 
 // ============= RESPONSES ENDPOINTS =============
-app.get('/responses', async (c) => {
+app.get('/make-server-5c72f45a/responses', async (c) => {
   try {
     const responses = await kv.getByPrefix('response:') || [];
 
@@ -724,7 +724,7 @@ app.get('/responses', async (c) => {
   }
 });
 
-app.post('/responses', async (c) => {
+app.post('/make-server-5c72f45a/responses', async (c) => {
   try {
     const data = await c.req.json();
     const id = Date.now().toString();
@@ -742,7 +742,7 @@ app.post('/responses', async (c) => {
   }
 });
 
-app.put('/responses/:id', async (c) => {
+app.put('/make-server-5c72f45a/responses/:id', async (c) => {
   try {
     const id = c.req.param('id');
     const data = await c.req.json();
@@ -761,7 +761,7 @@ app.put('/responses/:id', async (c) => {
   }
 });
 
-app.delete('/responses/:id', async (c) => {
+app.delete('/make-server-5c72f45a/responses/:id', async (c) => {
   try {
     const id = c.req.param('id');
     await kv.del(`response:${id}`);
@@ -773,7 +773,7 @@ app.delete('/responses/:id', async (c) => {
 });
 
 // ============= AI KNOWLEDGE BASE ENDPOINTS =============
-app.get('/ai/knowledge', async (c) => {
+app.get('/make-server-5c72f45a/ai/knowledge', async (c) => {
   try {
     const knowledge = await kv.getByPrefix('knowledge:') || [];
     return c.json(knowledge);
@@ -783,7 +783,7 @@ app.get('/ai/knowledge', async (c) => {
   }
 });
 
-app.post('/ai/knowledge', async (c) => {
+app.post('/make-server-5c72f45a/ai/knowledge', async (c) => {
   try {
     const data = await c.req.json();
     const id = Date.now().toString();
@@ -801,7 +801,7 @@ app.post('/ai/knowledge', async (c) => {
   }
 });
 
-app.delete('/ai/knowledge/:id', async (c) => {
+app.delete('/make-server-5c72f45a/ai/knowledge/:id', async (c) => {
   try {
     const id = c.req.param('id');
     await kv.del(`knowledge:${id}`);
@@ -813,7 +813,7 @@ app.delete('/ai/knowledge/:id', async (c) => {
 });
 
 // ============= AI SETTINGS ENDPOINTS =============
-app.get('/ai/settings', async (c) => {
+app.get('/make-server-5c72f45a/ai/settings', async (c) => {
   try {
     const settings = await kv.get('ai:settings') || {
       enabled: true,
@@ -829,7 +829,7 @@ app.get('/ai/settings', async (c) => {
   }
 });
 
-app.put('/ai/settings', async (c) => {
+app.put('/make-server-5c72f45a/ai/settings', async (c) => {
   try {
     const settings = await c.req.json();
     await kv.set('ai:settings', settings);
@@ -841,7 +841,7 @@ app.put('/ai/settings', async (c) => {
 });
 
 // ============= ANALYTICS ENDPOINT =============
-app.get('/analytics', async (c) => {
+app.get('/make-server-5c72f45a/analytics', async (c) => {
   try {
     const range = c.req.query('range') || '7d';
 
@@ -897,7 +897,7 @@ app.get('/analytics', async (c) => {
 });
 
 // ============= PRODUCTS ENDPOINT =============
-app.get('/products', async (c) => {
+app.get('/make-server-5c72f45a/products', async (c) => {
   try {
     // Get all unique product names from knowledge base
     const knowledge = await kv.getByPrefix('knowledge:') || [];
