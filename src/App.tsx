@@ -8,10 +8,17 @@ import { ResponsesManager } from './components/ResponsesManager';
 import { Analytics } from './components/Analytics';
 import { SettingsManager } from './components/SettingsManager';
 import { LoginPage } from './components/LoginPage';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 type TabType = 'dashboard' | 'conversations' | 'campaigns' | 'ai' | 'responses' | 'analytics' | 'settings';
 
 export default function App() {
+
+  // ✅ Facebook Privacy Policy (Public - No Auth)
+  if (window.location.pathname === '/privacy-policy') {
+    return <PrivacyPolicy />;
+  }
+
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
