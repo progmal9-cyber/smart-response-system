@@ -177,7 +177,11 @@ const TriggerManager: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Button onClick={handleSaveTrigger} disabled={loading}>
+      <Button
+        type="button"
+        onClick={handleSaveTrigger}
+        disabled={loading}
+      >
         💾 حفظ Trigger
       </Button>
     </div>
