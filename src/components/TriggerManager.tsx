@@ -177,13 +177,7 @@ const TriggerManager: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Button
-        type="button"
-        onClick={handleSaveTrigger}
-        className="w-full mt-4" // يخليه ظاهر وواضح
-        variant="default"
-        size="default"
-      >
+      <Button onClick={handleSaveTrigger}>
         💾 حفظ Trigger
       </Button>
     </div>
