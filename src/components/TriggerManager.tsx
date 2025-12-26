@@ -2,27 +2,22 @@ import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { toast } from "./ui/sonner";
 
 /**
- * ⚠️ ملاحظة مهمة
- * الملف ده مستقل تمامًا
- * مفيش أي تعديل على كود قديم
+ * ✅ تعديل آمن
+ * - رفع صورة أو فيديو من الجهاز
+ * - بدون إرسال
+ * - بدون كسر أي كود قديم
  */
 
 type TriggerProduct = {
   id: string;
   label: string;
   response: string;
-  imageUrl?: string;
+  mediaUrl?: string;
+  mediaType?: "image" | "video";
 };
 
 type Trigger = {
@@ -35,16 +30,55 @@ const TriggerManager: React.FC = () => {
   const [message, setMessage] = useState("");
   const [products, setProducts] = useState<TriggerProduct[]>([]);
   const [loading, setLoading] = useState(false);
+  const [triggers, setTriggers] = useState<Trigger[]>([]);
 
-  // منتج مؤقت أثناء الإضافة
+  // منتج مؤقت
   const [productLabel, setProductLabel] = useState("");
   const [productResponse, setProductResponse] = useState("");
-  const [productImage, setProductImage] = useState("");
+  const [productFile, setProductFile] = useState<File | null>(null);
 
-  const addProduct = () => {
+  useEffect(() => {
+    fetchTriggers();
+  }, []);
+
+  const fetchTriggers = async () => {
+    try {
+      const res = await fetch("/make-server-5c72f45a/triggers");
+      const data = await res.json();
+      setTriggers(data);
+    } catch {
+      toast("فشل تحميل Triggers");
+    }
+  };
+
+  const addProduct = async () => {
     if (!productLabel || !productResponse) {
       toast("لازم اسم المنتج ونص الرد");
       return;
+    }
+
+    let mediaUrl: string | undefined;
+    let mediaType: "image" | "video" | undefined;
+
+    if (productFile) {
+      const formData = new FormData();
+      formData.append("file", productFile);
+
+      const uploadRes = await fetch("/make-server-5c72f45a/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadRes.ok) {
+        toast("فشل رفع الملف");
+        return;
+      }
+
+      const uploadData = await uploadRes.json();
+      mediaUrl = uploadData.url;
+      mediaType = productFile.type.startsWith("video")
+        ? "video"
+        : "image";
     }
 
     setProducts((prev) => [
@@ -53,13 +87,14 @@ const TriggerManager: React.FC = () => {
         id: Date.now().toString(),
         label: productLabel,
         response: productResponse,
-        imageUrl: productImage || undefined,
+        mediaUrl,
+        mediaType,
       },
     ]);
 
     setProductLabel("");
     setProductResponse("");
-    setProductImage("");
+    setProductFile(null);
   };
 
   const removeProduct = (id: string) => {
@@ -74,94 +109,75 @@ const TriggerManager: React.FC = () => {
 
     setLoading(true);
 
-    /**
-     * ⛔ موقوف حاليًا
-     * هنا بس بنجهّز الداتا
-     * الربط مع الباك إند هنعمله بعدين خطوة خطوة
-     */
-    const payload: Trigger = {
-      id: Date.now().toString(),
-      message,
-      products,
-    };
+    try {
+      await fetch("/make-server-5c72f45a/triggers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, products }),
+      });
 
-    console.log("Trigger Payload (SAFE):", payload);
-
-    toast("تم حفظ الـ Trigger (محليًا)");
-
-    setLoading(false);
+      toast("✅ تم حفظ Trigger");
+      fetchTriggers();
+      setMessage("");
+      setProducts([]);
+    } catch {
+      toast("❌ فشل حفظ Trigger");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="p-6 space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>📩 رسالة Trigger (مفتوحة)</CardTitle>
+          <CardTitle>📩 رسالة Trigger</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent>
           <Textarea
-            placeholder="أهلًا 👋 نزل عندنا منتجات جديدة تناسب اختياراتك السابقة..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            placeholder="رسالة الترحيب أو العرض"
           />
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>🛍️ أزرار المنتجات</CardTitle>
+          <CardTitle>🛍️ منتج</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid gap-3">
-            <Input
-              placeholder="اسم المنتج (زر)"
-              value={productLabel}
-              onChange={(e) => setProductLabel(e.target.value)}
-            />
+        <CardContent className="space-y-3">
+          <Input
+            placeholder="اسم الزر"
+            value={productLabel}
+            onChange={(e) => setProductLabel(e.target.value)}
+          />
 
-            <Textarea
-              placeholder="نص الرد عند الضغط"
-              value={productResponse}
-              onChange={(e) => setProductResponse(e.target.value)}
-            />
+          <Textarea
+            placeholder="الرد عند الضغط"
+            value={productResponse}
+            onChange={(e) => setProductResponse(e.target.value)}
+          />
 
-            <Input
-              placeholder="رابط صورة المنتج (اختياري)"
-              value={productImage}
-              onChange={(e) => setProductImage(e.target.value)}
-            />
+          <Input
+            type="file"
+            accept="image/*,video/*"
+            onChange={(e) =>
+              setProductFile(e.target.files?.[0] || null)
+            }
+          />
 
-            <Button onClick={addProduct}>➕ إضافة منتج</Button>
-          </div>
+          <Button onClick={addProduct}>➕ إضافة منتج</Button>
 
-          {products.length > 0 && (
-            <div className="mt-4 space-y-2">
-              {products.map((p) => (
-                <div
-                  key={p.id}
-                  className="flex items-center justify-between border p-3 rounded"
-                >
-                  <div>
-                    <div className="font-semibold">{p.label}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {p.response}
-                    </div>
-                  </div>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => removeProduct(p.id)}
-                  >
-                    حذف
-                  </Button>
-                </div>
-              ))}
+          {products.map((p) => (
+            <div key={p.id} className="border p-2 rounded">
+              {p.label} — {p.mediaType || "بدون ملف"}
             </div>
-          )}
+          ))}
         </CardContent>
       </Card>
 
-      <Button disabled={loading} onClick={handleSaveTrigger}>
+      <Button onClick={handleSaveTrigger} disabled={loading}>
         💾 حفظ Trigger
       </Button>
     </div>
