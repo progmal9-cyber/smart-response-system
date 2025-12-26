@@ -108,6 +108,7 @@ export default function App() {
                   }`}
                 >
                   <Icon className="w-6 h-6" />
+                  <Icon className="w-5 h-5" />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -124,8 +125,9 @@ export default function App() {
         {activeTab === 'responses' && <ResponsesManager />}
         {activeTab === 'ai' && <AIManager />}
         {activeTab === 'analytics' && <Analytics />}
+        { activeTab === 'trigger' && <TriggerManager /> }  
         {activeTab === 'settings' && <SettingsManager onLogout={handleLogout} />}
-        {activeTab === 'trigger' && <TriggerManager />}
+        
       </main>
     </div>
   );
