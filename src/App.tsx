@@ -94,7 +94,7 @@ export default function App() {
       {/* Navigation Tabs */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex gap-1 overflow-x-auto py-2">
+          <nav className="flex gap-2 flex-wrap overflow-x-auto py-2">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
