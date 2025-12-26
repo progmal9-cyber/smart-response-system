@@ -180,7 +180,9 @@ const TriggerManager: React.FC = () => {
       <Button
         type="button"
         onClick={handleSaveTrigger}
-        disabled={loading}
+        className="w-full mt-4" // يخليه ظاهر وواضح
+        variant="default"
+        size="default"
       >
         💾 حفظ Trigger
       </Button>
