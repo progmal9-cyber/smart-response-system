@@ -107,7 +107,6 @@ export default function App() {
                       : 'text-gray-600 hover:bg-gray-100'
                   }`}
                 >
-                  
                   <Icon className="w-5 h-5" />
                   <span>{tab.label}</span>
                 </button>
