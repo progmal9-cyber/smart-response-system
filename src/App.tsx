@@ -9,8 +9,10 @@ import { Analytics } from './components/Analytics';
 import { SettingsManager } from './components/SettingsManager';
 import { LoginPage } from './components/LoginPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import TriggerManager from './components/TriggerManager';
 
-type TabType = 'dashboard' | 'conversations' | 'campaigns' | 'ai' | 'responses' | 'analytics' | 'settings';
+
+type TabType = 'dashboard' | 'conversations' | 'campaigns' | 'ai' | 'responses' | 'analytics' | 'settings' | 'trigger';
 
 export default function App() {
 
@@ -64,6 +66,7 @@ export default function App() {
     { id: 'ai' as const, label: 'الذكاء الاصطناعي', icon: Bot },
     { id: 'analytics' as const, label: 'الإحصائيات', icon: BarChart3 },
     { id: 'settings' as const, label: 'الإعدادات', icon: Settings },
+    { id: 'trigger' as const, label: 'Trigger Manager', icon: Bot },
   ];
 
   return (
@@ -122,6 +125,7 @@ export default function App() {
         {activeTab === 'ai' && <AIManager />}
         {activeTab === 'analytics' && <Analytics />}
         {activeTab === 'settings' && <SettingsManager onLogout={handleLogout} />}
+        {activeTab === 'trigger' && <TriggerManager />}
       </main>
     </div>
   );
