@@ -239,19 +239,31 @@ app.post('/make-server-5c72f45a/webhook', async (c) => {
   try {
     const body = await c.req.json();
 
-    if (body.object === 'page') {
-      for (const entry of body.entry) {
-        for (const messaging of entry.messaging) {
-          if (messaging.message) {
-            await handleMessage(messaging);
-          } else if (messaging.postback) {
-            await handlePostback(messaging);
-          } else if (messaging.referral) {
-            await handleReferral(messaging);
-          }
-        }
+if (body.object === 'page') {
+  for (const entry of body.entry ?? []) {
+
+    // Guard: مش كل entry بيبقى فيه messaging
+    if (!entry.messaging || !Array.isArray(entry.messaging)) {
+      console.log('No messaging events in this entry');
+      continue;
+    }
+
+    for (const messaging of entry.messaging) {
+
+      // تجاهل رسائل الصفحة لنفسها + delivery/read
+      if (messaging.message?.is_echo) continue;
+
+      if (messaging.message) {
+        await handleMessage(messaging);
+      } else if (messaging.postback) {
+        await handlePostback(messaging);
+      } else if (messaging.referral) {
+        await handleReferral(messaging);
       }
     }
+  }
+}
+
 
     return c.json({ success: true });
   } catch (error) {
