@@ -177,9 +177,12 @@ const TriggerManager: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Button onClick={handleSaveTrigger}>
-        💾 حفظ Trigger
+      <Button asChild>
+        <button type="button" onClick={handleSaveTrigger}>
+          💾 حفظ Trigger
+        </button>
       </Button>
+
     </div>
   );
 };
