@@ -3,7 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Button } from "../components/ui/button"
 import { Textarea } from "../components/ui/textarea"
 import { Input } from "../components/ui/input"
-import { supabase } from "../utils/supabase/client"
+import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(projectId, publicAnonKey);
+
 
 
 type FacebookPost = {
