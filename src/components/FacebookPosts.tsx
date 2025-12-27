@@ -38,21 +38,29 @@ export default function FacebookPosts() {
     fetchTriggers()
   }, [])
 
-  const fetchPosts = async () => {
-    try {
-      setLoading(true)
-      const res = await fetch(
-        `/functions/v1/make-server-5c72f45a/facebook/posts`
-      )
-      if (!res.ok) throw new Error()
-      const data: { success: boolean; posts: FacebookPost[] } = await res.json()
-      setPosts(data.posts || [])
-    } catch {
-      alert("حصل خطأ أثناء تحميل المنشورات")
-    } finally {
-      setLoading(false)
-    }
+const fetchPosts = async () => {
+  try {
+    setLoading(true)
+    const res = await fetch(
+      `https://${projectId}.supabase.co/functions/v1/make-server-5c72f45a/facebook/posts`,
+      {
+        headers: {
+          'Authorization': `Bearer ${publicAnonKey}`,
+        },
+      }
+    )
+
+    if (!res.ok) throw new Error()
+
+    const data: { success: boolean; posts: FacebookPost[] } = await res.json()
+    setPosts(data.posts || [])
+  } catch (error) {
+    console.error(error)
+    alert("حصل خطأ أثناء تحميل المنشورات")
+  } finally {
+    setLoading(false)
   }
+}
 
   const fetchTriggers = async () => {
     const { data, error } = await supabase
