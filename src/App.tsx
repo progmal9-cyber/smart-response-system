@@ -69,7 +69,8 @@ export default function App() {
     { id: 'analytics' as const, label: 'الإحصائيات', icon: BarChart3 },
     { id: 'settings' as const, label: 'الإعدادات', icon: Settings },
     { id: 'trigger' as const, label: 'Trigger Manager', icon: Bot },
-    { id: 'facebook-posts', label: 'منشورات فيسبوك', icon: Megaphone },
+    { id: 'facebook-posts' as const, label: 'منشورات فيسبوك', icon: Megaphone },
+
 
   ];
 
@@ -128,7 +129,7 @@ export default function App() {
         {activeTab === 'responses' && <ResponsesManager />}
         {activeTab === 'ai' && <AIManager />}
         {activeTab === 'analytics' && <Analytics />}
-        { activeTab === 'trigger' && <TriggerManager /> }  
+        {activeTab === 'trigger' && <TriggerManager /> }  
         {activeTab === 'facebook-posts' && <FacebookPosts />}
         {activeTab === 'settings' && <SettingsManager onLogout={handleLogout} />}
         
