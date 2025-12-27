@@ -10,7 +10,6 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-
 type FacebookPost = {
   id: string
   message?: string
@@ -42,16 +41,11 @@ export default function FacebookPosts() {
   const fetchPosts = async () => {
     try {
       setLoading(true)
-
       const res = await fetch(
-        "/make-server-5c72f45a/facebook/posts"
+        `/functions/v1/make-server-5c72f45a/facebook/posts`
       )
-
       if (!res.ok) throw new Error()
-
-      const data: { success: boolean; posts: FacebookPost[] } =
-        await res.json()
-
+      const data: { success: boolean; posts: FacebookPost[] } = await res.json()
       setPosts(data.posts || [])
     } catch {
       alert("حصل خطأ أثناء تحميل المنشورات")
@@ -59,7 +53,6 @@ export default function FacebookPosts() {
       setLoading(false)
     }
   }
-
 
   const fetchTriggers = async () => {
     const { data, error } = await supabase
@@ -87,7 +80,7 @@ export default function FacebookPosts() {
 
     const { error } = await supabase.storage
       .from("campaign-images")
-      .upload(fileName, file)
+      .upload(fileName, file, { cacheControl: "3600", upsert: true })
 
     if (error) {
       alert("فشل رفع الصورة")
@@ -181,10 +174,7 @@ export default function FacebookPosts() {
               placeholder="💬 رد التعليق (عام)"
               value={replyTexts[post.id] || ""}
               onChange={(e) =>
-                setReplyTexts((prev) => ({
-                  ...prev,
-                  [post.id]: e.target.value,
-                }))
+                setReplyTexts((prev) => ({ ...prev, [post.id]: e.target.value }))
               }
             />
 
@@ -192,10 +182,7 @@ export default function FacebookPosts() {
               placeholder="📩 الرسالة الخاصة"
               value={privateMessages[post.id] || ""}
               onChange={(e) =>
-                setPrivateMessages((prev) => ({
-                  ...prev,
-                  [post.id]: e.target.value,
-                }))
+                setPrivateMessages((prev) => ({ ...prev, [post.id]: e.target.value }))
               }
             />
 
@@ -203,10 +190,7 @@ export default function FacebookPosts() {
               type="file"
               accept="image/*"
               onChange={(e) =>
-                setImageFiles((prev) => ({
-                  ...prev,
-                  [post.id]: e.target.files?.[0] || null,
-                }))
+                setImageFiles((prev) => ({ ...prev, [post.id]: e.target.files?.[0] || null }))
               }
             />
 
