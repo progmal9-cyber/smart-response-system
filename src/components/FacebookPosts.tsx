@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button"
 import { Textarea } from "../components/ui/textarea"
 import { Input } from "../components/ui/input"
 import { createClient } from '@supabase/supabase-js';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
