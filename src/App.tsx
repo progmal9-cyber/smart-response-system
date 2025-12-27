@@ -10,9 +10,11 @@ import { SettingsManager } from './components/SettingsManager';
 import { LoginPage } from './components/LoginPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TriggerManager from './components/TriggerManager';
+import FacebookPosts from './components/FacebookPosts';
 
 
-type TabType = 'dashboard' | 'conversations' | 'campaigns' | 'ai' | 'responses' | 'analytics' | 'settings' | 'trigger';
+
+type TabType = 'dashboard' | 'conversations' | 'campaigns' | 'ai' | 'responses' | 'analytics' | 'settings' | 'trigger' | 'facebook-posts';
 
 export default function App() {
 
@@ -67,6 +69,8 @@ export default function App() {
     { id: 'analytics' as const, label: 'الإحصائيات', icon: BarChart3 },
     { id: 'settings' as const, label: 'الإعدادات', icon: Settings },
     { id: 'trigger' as const, label: 'Trigger Manager', icon: Bot },
+    { id: 'facebook-posts', label: 'منشورات فيسبوك', icon: Megaphone },
+
   ];
 
   return (
@@ -125,6 +129,7 @@ export default function App() {
         {activeTab === 'ai' && <AIManager />}
         {activeTab === 'analytics' && <Analytics />}
         { activeTab === 'trigger' && <TriggerManager /> }  
+        {activeTab === 'facebook-posts' && <FacebookPosts />}
         {activeTab === 'settings' && <SettingsManager onLogout={handleLogout} />}
         
       </main>
