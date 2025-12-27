@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
-import { supabase } from "@/utils/supabase/client"
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
+import { Button } from "../components/ui/button"
+import { Textarea } from "../components/ui/textarea"
+import { Input } from "../components/ui/input"
+import { supabase } from "../utils/supabase/client"
+
 
 type FacebookPost = {
   id: string
