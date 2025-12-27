@@ -6,7 +6,6 @@ import { Input } from "../components/ui/input"
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(projectId, publicAnonKey);
 
 
 
@@ -20,6 +19,7 @@ export default function FacebookPosts() {
   const [posts, setPosts] = useState<FacebookPost[]>([])
   const [loading, setLoading] = useState(false)
   const [savingPost, setSavingPost] = useState<string | null>(null)
+  const supabase = createClient(projectId, publicAnonKey);
 
   // states لكل بوست
   const [replyTexts, setReplyTexts] = useState<Record<string, string>>({})
